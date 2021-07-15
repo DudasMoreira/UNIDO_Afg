@@ -18,8 +18,7 @@
 
 	<div>
 	  <h1>SurveyJS and Google Sheets demo</h1>
-	  <p class="lead">This is example website.</p>
-	  <p> More information: <a href="https://towardsdatascience.com/how-to-create-online-survey-for-free-with-surveyjs-and-google-sheets-d9a782d0f458" target="_blank">How to create online survey for free with SurveyJS and Google Sheets</a></p>
+	  <p class="lead">This is example website. More information: [INSERT MEDIUM URL AFTER PUBLICATION]</p>
 	  <p><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
 		Launch demo survey
 	  </button></p>
@@ -53,46 +52,35 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 	<script>
-
 Survey.StylesManager.applyTheme("modern");
 
 var surveyJSON = {"pages":[{"name":"Identification Data","elements":[{"type":"text","name":"ID1","title":"Name of Respondent"},{"type":"text","name":"ID2","title":"Company Name"},{"type":"multipletext","name":"ID3","title":"Location","items":[{"name":"Loc_Prv","title":"Province"},{"name":"Loc_Dis","title":"District"},{"name":"Loc_City","title":"City"}]},{"type":"text","name":"question1","title":"Position"},{"type":"radiogroup","name":"question2","title":"Education Level","choices":[{"value":"Edu1","text":"Primary"},{"value":"Edu2","text":"Secundary"},{"value":"Edu3","text":"Terciary"},{"value":"Edu4","text":"Vocational"}],"hasOther":true},{"type":"multipletext","name":"question3","title":"Contact Information","items":[{"name":"Phone","title":"Phone"},{"name":"Email","title":"Email"}]},{"type":"radiogroup","name":"question4","title":"Industry Sector","choices":[{"value":"IndSec1","text":"Agriculture"},{"value":"IndSec2","text":"Commerce"},{"value":"IndSec3","text":"Manufactoring"},{"value":"IndSec4","text":"Services"}],"hasOther":true}],"title":"Identification Data"}]}
 
-function sendDataToServer(survey) {
-    //send Ajax request to your web server.
-    //Display information about sending data
-    	options.showDataSaving();
-    	$.ajax({
-    		url: 'https://script.google.com/macros/s/AKfycbzEwnkiXbcjmUpi95UPI8iEeAPhGbN2v1fU9-W4UtMhjrPV0b5EfPaVr_nXbIvLcZG41Q/exec',
-    		type: 'post',
-    		data: JSON.stringify(survey.data),
-    		//We need tell web app that we use plain text.
-    		headers: {
-    			"Content-Type": "text/plain"
-    		},
-    		processData: false,
-    		complete: function(res, status) {
-    			if (status == 'success') {
-    				//Show that data was send successfully
-    				options.showDataSavingSuccess();
-    			}else {
-    				//Display retry button in case of error
-    				options.showDataSavingError();
-    			}
-    		},
-    	});
-    }
-
-
-    alert("The results are:" + JSON.stringify(survey.data));
+function sendDataToServer(survey, options) {
+	options.showDataSaving();
+	$.ajax({
+		url: 'https://script.google.com/macros/s/AKfycbzEwnkiXbcjmUpi95UPI8iEeAPhGbN2v1fU9-W4UtMhjrPV0b5EfPaVr_nXbIvLcZG41Q/exec',
+		type: 'post',
+		data: JSON.stringify(survey.data),
+		headers: {
+			"Content-Type": "text/plain"
+		},
+		processData: false,
+		complete: function(res, status) {
+			if (status == 'success') {
+				options.showDataSavingSuccess();
+			}else {
+				options.showDataSavingError();
+			}
+		},
+	});
 }
 
 var survey = new Survey.Model(surveyJSON);
 $("#surveyContainer").Survey({
     model: survey,
-    onComplete: sendDataToServer
+	onComplete: sendDataToServer
 });
-
-</script>
+	</script>
   </body>
 </html>
